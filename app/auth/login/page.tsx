@@ -35,7 +35,13 @@ export default function Login() {
       localStorage.setItem("token", res.accessToken);
       localStorage.setItem("user", JSON.stringify(res.user));
       // Redirect to dashboard
-      router.push("/dashboard/agent");
+      if (res.user.role === "agent") {
+        router.push("/agent");
+      } else if (res.user.role === "supervisor") {
+        router.push("/supervisor");
+      } else if (res.user.role === "admin") {
+        router.push("/admin");
+      }
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -71,7 +77,7 @@ export default function Login() {
             Login
           </Button>
           <p className="text-center">or</p>
-          <Link href="/register">
+          <Link href="/auth/register">
             <Button variant="outline" className="w-full cursor-pointer">
               Create an account
             </Button>
