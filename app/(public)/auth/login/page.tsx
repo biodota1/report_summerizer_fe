@@ -31,10 +31,6 @@ export default function Login() {
       });
 
       setUser(res.user);
-      // Save JWT token in localStorage
-      localStorage.setItem("token", res.accessToken);
-      localStorage.setItem("user", JSON.stringify(res.user));
-      // Redirect to dashboard
       if (res.user.role === "agent") {
         router.push("/agent");
       } else if (res.user.role === "supervisor") {

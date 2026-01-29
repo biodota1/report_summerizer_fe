@@ -1,4 +1,6 @@
 "use client";
+import { apiFetch } from "@/lib/api";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   createContext,
   useContext,
@@ -10,6 +12,7 @@ import {
 interface User {
   id: string;
   email: string;
+  name: string;
   role?: string;
 }
 
@@ -23,15 +26,18 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const queryClient = useQueryClient();
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
   }, []);
-  const logout = () => {
-    localStorage.removeItem("token");
+  const logout = async () => {
+    await apiFetch("/auth/logout", { method: "POST", credentials: "include" });
     localStorage.removeItem("user");
+
+    queryClient.clear();
     setUser(null);
   };
   return (

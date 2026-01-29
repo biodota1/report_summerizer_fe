@@ -15,14 +15,11 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 flex flex-col gap-10">
-      <h1 className="text-right text-3xl font-semibold">
-        {" "}
-        {date}, Team Alpha{" "}
-      </h1>
+      <h1 className="text-right text-3xl font-semibold">{date}, Team Alpha </h1>
 
       <DashboardStats />
 
-      <Link href="/dashboard/agent/callreport">
+      <Link href="/agent/callreport">
         <Button className="cursor-pointer">New Call Report</Button>
       </Link>
     </div>

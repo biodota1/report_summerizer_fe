@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function Homenav() {
+export default function PublicNavbar() {
   return (
     <nav className="flex justify-center h-[50px] ">
       <div className="flex w-[864px] items-center justify-between mx-16 px-16">

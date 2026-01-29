@@ -6,48 +6,42 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-
-interface AIFeedback {
-  sentiment: string;
-  keyTopics: string;
-  suggestedActions: string;
-}
+import { apiFetch } from "@/lib/api";
 
 export default function CallReport() {
   // Optional state to manage form Inputs
-  const [customerName, setCustomerName] = useState<string>("");
-  const [accountNumber, setAccountNumber] = useState<string>("");
-  const [serviceType, setServiceType] = useState<string>("Internet");
-  const [callType, setCallType] = useState<string>("Retention");
-  const [callOutcome, setCallOutcome] = useState<string>("Retained");
-  const [reason, setReason] = useState<string>("");
-  const [callSummary, setCallSummary] = useState<string>("");
-
-  // Example AI feedback state
-  const [aiFeedback, setAiFeedback] = useState<AIFeedback>({
-    sentiment: "Positive / Neutral / Negative",
-    keyTopics: "Internet Speed, Billing",
-    suggestedActions: "Offer discount, explain upgrade options",
-  });
+  const [customer_name, setCustomerName] = useState<string>("");
+  const [account_name, setAccountName] = useState<string>("");
+  const [service_type, setServiceType] = useState<string>("Internet");
+  const [reason, setReason] = useState<string>("Retention");
+  const [retention_strategy, setRetentionStrategy] =
+    useState<string>("Retained");
+  const [offer_made, setOfferMade] = useState<string>("");
+  const [call_outcome, setCallOutcome] = useState<string>("");
+  const [supervisor_id, setSupervisorId] = useState<string>("1");
+  const [team_id, setTeamId] = useState<string>("1");
+  const [submitted_by, setSubmittedBy] = useState<string>("1");
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Example payload
     const payload = {
-      customerName,
-      accountNumber,
-      serviceType,
-      callType,
-      callOutcome,
+      customer_name,
+      account_name,
+      service_type,
       reason,
-      callSummary,
-      aiFeedback,
+      retention_strategy,
+      offer_made,
+      call_outcome,
+      supervisor_id,
+      team_id,
+      submitted_by,
     };
 
     try {
       // Call your API to save the report
-      const response = await fetch("/api/calls", {
+      const response = await apiFetch("/report/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -75,9 +69,8 @@ export default function CallReport() {
           <Label>Customer Name</Label>
           <Input
             type="text"
-            value={customerName}
+            value={customer_name}
             onChange={(e) => setCustomerName(e.target.value)}
-            required
           />
         </div>
 
@@ -85,18 +78,16 @@ export default function CallReport() {
           <Label>Account Number</Label>
           <Input
             type="text"
-            value={accountNumber}
-            onChange={(e) => setAccountNumber(e.target.value)}
-            required
+            value={account_name}
+            onChange={(e) => setAccountName(e.target.value)}
           />
         </div>
 
         <div className="flex gap-4">
           <Label>Service Type</Label>
           <select
-            value={serviceType}
+            value={service_type}
             onChange={(e) => setServiceType(e.target.value)}
-            required
           >
             <option>Internet</option>
             <option>TV</option>
@@ -107,11 +98,21 @@ export default function CallReport() {
 
         {/* Call Details */}
         <div className="flex gap-4">
-          <Label>Call Type</Label>
+          <Label>Reason</Label>
+          <select value={reason} onChange={(e) => setReason(e.target.value)}>
+            <option>Retention</option>
+            <option>Billing</option>
+            <option>Tech Support</option>
+            <option>Complaint</option>
+          </select>
+        </div>
+
+        {/* Call Details */}
+        <div className="flex gap-4">
+          <Label>Retention Stategy</Label>
           <select
-            value={callType}
-            onChange={(e) => setCallType(e.target.value)}
-            required
+            value={retention_strategy}
+            onChange={(e) => setRetentionStrategy(e.target.value)}
           >
             <option>Retention</option>
             <option>Billing</option>
@@ -121,46 +122,27 @@ export default function CallReport() {
         </div>
 
         <div className="flex gap-4">
+          <Label>Offer Made</Label>
+          <select
+            value={offer_made}
+            onChange={(e) => setOfferMade(e.target.value)}
+          >
+            <option>10 off</option>
+            <option>Free</option>
+          </select>
+        </div>
+
+        <div className="flex gap-4">
           <Label>Call Outcome</Label>
           <select
-            value={callOutcome}
+            value={call_outcome}
             onChange={(e) => setCallOutcome(e.target.value)}
-            required
           >
             <option>Retained</option>
             <option>Cancelled</option>
             <option>Issue Resolved</option>
             <option>Follow-up Required</option>
           </select>
-        </div>
-
-        <div className="flex gap-4">
-          <Label>Reason for Cancellation / Complaint</Label>
-          <Textarea
-            className="w-120"
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            placeholder="Type your message here."
-          />
-        </div>
-
-        <div className="flex gap-4">
-          <Label>Call Summary</Label>
-          <Textarea
-            className="w-120"
-            value={callSummary}
-            onChange={(e) => setCallSummary(e.target.value)}
-            required
-            placeholder="Type your message here."
-          />
-        </div>
-
-        {/* AI Feedback Section */}
-        <div className="bg-gray-50 p-4 rounded">
-          <h2 className="font-semibold">AI Suggestions</h2>
-          <p>Sentiment: {aiFeedback.sentiment}</p>
-          <p>Key Topics: {aiFeedback.keyTopics}</p>
-          <p>Suggested Actions: {aiFeedback.suggestedActions}</p>
         </div>
 
         {/* Action Buttons */}
