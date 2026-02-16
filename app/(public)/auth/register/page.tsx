@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
@@ -18,6 +19,7 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loaded, setLoaded] = useState(false);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,9 +47,22 @@ export default function Register() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
+    <div className="relative flex flex-row min-h-screen items-center justify-center px-16 mx-16">
+      <div className="relative min-h-screen w-[500px]">
+        <Image
+          src={"/images/register_image.png"}
+          alt="register_image"
+          fill
+          priority
+          objectFit="cover"
+          onLoad={() => setLoaded(true)}
+          className={`object-cover transition-all duration-1000 ease-out
+          ${loaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"}
+        `}
+        />
+      </div>
       <form
-        className="w-130 h-[600] flex flex-col gap-10"
+        className="relative min-h-screen w-[800px] flex flex-col gap-10 px-24 py-26"
         onSubmit={handleRegister}
       >
         <h2 className="text-4xl font-bold">Register</h2>

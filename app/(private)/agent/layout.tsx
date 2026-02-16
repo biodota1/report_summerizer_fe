@@ -6,109 +6,203 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/app/context/AuthContext";
+import Logo from "@/components/ui/logo";
+import AgentNav from "./components/ui/agentNav";
 
-type ButtonVariant =
-  | "default"
-  | "destructive"
-  | "link"
-  | "outline"
-  | "secondary"
-  | "ghost";
+type sidebarNavButton = {
+  bg: string;
+  text: string;
+  icon: string;
+};
 
 export default function AgentDashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [selectDashboard, setselectDashboard] = useState("bg-blue-600");
-  const [selectReports, setSelectReports] = useState("");
-  const [selectAccounts, setselectAccounts] = useState(
-    "bg-white text-slate-800",
-  );
-  const [selectTasks, setselectTasks] = useState("bg-white text-slate-800");
+  const [selectHome, setSelectHome] = useState<sidebarNavButton>({
+    bg: "bg-blue-600",
+    text: "text-white",
+    icon: "/icons/home_icon_selected.png",
+  });
+  const [selectAddNewReport, setSelectAddNewReport] =
+    useState<sidebarNavButton>({
+      bg: "bg-white",
+      text: "text-blue-600",
+      icon: "/icons/new_report_icon_v1.png",
+    });
+  const [selectAccounts, setselectAccounts] = useState<sidebarNavButton>({
+    bg: "bg-white",
+    text: "text-blue-600",
+    icon: "/icons/user_icon.png",
+  });
+
+  const [selectNotification, setSelectNotification] =
+    useState<sidebarNavButton>({
+      bg: "bg-white",
+      text: "text-blue-600",
+      icon: "/icons/notification_icon.png",
+    });
   const { user, logout } = useAuth();
+
+  const unSelectedButton = {
+    bg: "bg-white",
+    text: "text-blue-500",
+  };
+
+  const selectedButton = {
+    bg: "bg-blue-500",
+    text: "text-white",
+  };
+
   return (
-    <div className="flex">
-      <aside className="min-h-screen w-60 flex flex-col justify-between p-4">
-        <div className="flex flex-col gap-10">
-          <div className="flex flex-col justify-center items-center">
-            <Image
-              src="/images/default_profile_image.png"
-              alt="profile-picture"
-              width={100}
-              height={100}
-              className="rounded-full"
-            />
-            <p className="text-sm text-slate-600">Welcome back,</p>
-            <h2 className="text-lg font-semibold">{user?.name}</h2>
-          </div>
+    <div className="flex h-screen">
+      <aside className="w-60 flex flex-col m-2 p-4 shadow-lg shadow-slate-500">
+        <div className="h-full flex flex-col gap-10">
+          <Logo />
 
           <div className="flex flex-col gap-2">
             <Link href="/agent">
               <Button
-                className={`font-bold w-full justify-start pl-8 rounded-full cursor-pointer hover:${selectDashboard} ${selectDashboard}`}
+                className={`font-bold w-full justify-start pl-8 rounded-full cursor-pointer hover:${selectHome.bg} ${selectHome.bg}`}
                 onClick={() => {
-                  setselectDashboard("bg-blue-600");
-                  setSelectReports("bg-white text-slate-800");
-                  setselectAccounts("bg-white text-slate-800");
-                  setselectTasks("bg-white text-slate-800");
+                  setSelectHome({
+                    ...selectedButton,
+                    icon: "/icons/home_icon_selected.png",
+                  });
+                  setSelectAddNewReport({
+                    ...unSelectedButton,
+                    icon: "/icons/new_report_icon_v1.png",
+                  });
+                  setselectAccounts({
+                    ...unSelectedButton,
+                    icon: "/icons/user_icon.png",
+                  });
+                  setSelectNotification({
+                    ...unSelectedButton,
+                    icon: "/icons/notification_icon.png",
+                  });
                 }}
               >
-                Dashboard
+                <Image
+                  src={selectHome.icon}
+                  alt="home"
+                  height={20}
+                  width={20}
+                ></Image>
+                <p className={selectHome.text}>Home</p>
               </Button>
             </Link>
             <Link href="/agent/callreport ">
               <Button
-                className={`font-bold w-full justify-start pl-8 rounded-full cursor-pointer hover:${selectReports} ${selectReports}`}
+                className={`font-bold w-full justify-start pl-8 rounded-full cursor-pointer hover:${selectAddNewReport.bg} ${selectAddNewReport.bg}`}
                 onClick={() => {
-                  setselectDashboard("bg-white text-slate-800");
-                  setSelectReports("bg-blue-600");
-                  setselectAccounts("bg-white text-slate-800");
-                  setselectTasks("bg-white text-slate-800");
+                  setSelectHome({
+                    ...unSelectedButton,
+                    icon: "/icons/home_icon.png",
+                  });
+                  setSelectAddNewReport({
+                    ...selectedButton,
+                    icon: "/icons/new_report_icon_selected_v1.png",
+                  });
+                  setselectAccounts({
+                    ...unSelectedButton,
+                    icon: "/icons/user_icon.png",
+                  });
+                  setSelectNotification({
+                    ...unSelectedButton,
+                    icon: "/icons/notification_icon.png",
+                  });
                 }}
               >
-                Reports
+                <Image
+                  src={selectAddNewReport.icon}
+                  alt="new_report_icon"
+                  height={20}
+                  width={20}
+                />
+                <p className={selectAddNewReport.text}>New Report</p>
               </Button>
             </Link>
             <Link href="/agent/accounts">
               <Button
-                className={`font-bold w-full justify-start pl-8 rounded-full cursor-pointer hover:${selectAccounts} ${selectAccounts}`}
+                className={`font-bold w-full justify-start pl-8 rounded-full cursor-pointer hover:${selectAccounts.bg} ${selectAccounts.bg}`}
                 onClick={() => {
-                  setselectDashboard("bg-white text-slate-800");
-                  setSelectReports("bg-white text-slate-800");
-                  setselectAccounts("bg-blue-600");
-                  setselectTasks("bg-white text-slate-800");
+                  setSelectHome({
+                    ...unSelectedButton,
+                    icon: "/icons/home_icon.png",
+                  });
+                  setSelectAddNewReport({
+                    ...unSelectedButton,
+                    icon: "/icons/new_report_icon_v1.png",
+                  });
+                  setselectAccounts({
+                    ...selectedButton,
+                    icon: "/icons/user_icon_selected.png",
+                  });
+                  setSelectNotification({
+                    ...unSelectedButton,
+                    icon: "/icons/notification_icon.png",
+                  });
                 }}
               >
-                Accounts
+                <Image
+                  src={selectAccounts.icon}
+                  alt="account"
+                  height={20}
+                  width={20}
+                />
+                <p className={selectAccounts.text}>Accounts</p>
               </Button>
             </Link>
             <Link href="/agent/tools">
               <Button
-                className={`font-bold w-full justify-start pl-8 rounded-full cursor-pointer hover:${selectTasks} ${selectTasks}`}
+                className={`font-bold w-full justify-start pl-8 rounded-full cursor-pointer hover:${selectNotification.bg} ${selectNotification.bg}`}
                 onClick={() => {
-                  setselectDashboard("bg-white text-slate-800");
-                  setSelectReports("bg-white text-slate-800");
-                  setselectAccounts("bg-white text-slate-800");
-                  setselectTasks("bg-blue-600");
+                  setSelectHome({
+                    ...unSelectedButton,
+                    icon: "/icons/home_icon.png",
+                  });
+                  setSelectAddNewReport({
+                    ...unSelectedButton,
+                    icon: "/icons/new_report_icon_v1.png",
+                  });
+                  setselectAccounts({
+                    ...unSelectedButton,
+                    icon: "/icons/user_icon.png",
+                  });
+                  setSelectNotification({
+                    ...selectedButton,
+                    icon: "/icons/notification_icon_selected.png",
+                  });
                 }}
               >
-                Notification
+                <Image
+                  src={selectNotification.icon}
+                  alt="notification_icon"
+                  height={20}
+                  width={20}
+                />
+                <p className={selectNotification.text}>Notification</p>
               </Button>
             </Link>
           </div>
         </div>
-
-        <Link href="/auth/login" className="h-30 flex flex-col gap-5 ">
-          <Button
-            className="w-full rounded-full cursor-pointer"
-            onClick={logout}
-          >
-            Log out
-          </Button>
-        </Link>
+        <div className="h-30 flex flex-col gap-5">
+          <Link href="/auth/login" className="h-30 flex flex-col gap-5 ">
+            <Button
+              className="w-full rounded-full cursor-pointer"
+              onClick={logout}
+            >
+              Log out
+            </Button>
+          </Link>
+        </div>
       </aside>
-      <main className="w-full">{children}</main>
+      <main className="w-full flex flex-col overflow-auto  shadow-lg shadow-slate-500 my-2 mr-2">
+        <AgentNav />
+        {children}
+      </main>
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
@@ -16,7 +17,8 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const { setUser } = useAuth();
+  const { login } = useAuth();
+  const [loaded, setLoaded] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,13 +26,12 @@ export default function Login() {
     setError("");
 
     try {
-      // Send POST request to Express backend
       const res = await apiFetch("/auth/login", {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });
 
-      setUser(res.user);
+      login();
       if (res.user.role === "agent") {
         router.push("/agent");
       } else if (res.user.role === "supervisor") {
@@ -46,9 +47,23 @@ export default function Login() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
+    <div className="relative flex flex-row items-center justify-center px-16 mx-16">
+      <div className="relative w-[500px] min-h-screen">
+        <Image
+          src={"/images/login_image.png"}
+          alt="login_image"
+          fill
+          priority
+          objectFit="cover"
+          onLoad={() => setLoaded(true)}
+          className={`object-cover transition-all duration-1000 ease-out
+          ${loaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"}
+        `}
+        />
+      </div>
+
       <form
-        className="w-130 h-[600] flex flex-col gap-10"
+        className="relative w-[800px] min-h-screen flex flex-col gap-10 px-24 py-26"
         onSubmit={handleLogin}
       >
         <h2 className="text-4xl font-bold">Login</h2>

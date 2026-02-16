@@ -20,7 +20,6 @@ export default function CallReport() {
   const [call_outcome, setCallOutcome] = useState<string>("");
   const [supervisor_id, setSupervisorId] = useState<string>("1");
   const [team_id, setTeamId] = useState<string>("1");
-  const [submitted_by, setSubmittedBy] = useState<string>("1");
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,7 +35,6 @@ export default function CallReport() {
       call_outcome,
       supervisor_id,
       team_id,
-      submitted_by,
     };
 
     try {

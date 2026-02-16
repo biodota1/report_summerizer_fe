@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/app/context/AuthContext";
 import AdminNav from "./components/ui/adminnav";
 import Image from "next/image";
+import Logo from "@/components/ui/logo";
 
 type sidebarNavButton = {
   bg: string;
@@ -36,6 +37,8 @@ export default function AgentDashboardLayout({
     icon: "/icons/report_icon.png",
   });
 
+  
+
   const { user, logout } = useAuth();
 
   const unSelectedButton = {
@@ -52,14 +55,12 @@ export default function AgentDashboardLayout({
     <div className="flex h-screen">
       <aside className="w-60 flex flex-col m-2 p-4 shadow-lg shadow-slate-500">
         <div className="h-full flex flex-col gap-10">
-          <h1 className="text-2xl font-bold text-center text-blue-500">
-            CallDoc Pro
-          </h1>
+          <Logo />
 
           <div className="flex flex-col gap-2">
             <Link href="/admin">
               <Button
-                className={`flex gap-4 font-bold w-full justify-start pl-8 rounded-full cursor-pointer hover:${selectDashboard.bg} ${selectDashboard.bg} $`}
+                className={`flex gap-4 font-bold w-full justify-start pl-8 rounded-full cursor-pointer hover:${selectDashboard.bg} ${selectDashboard.bg}`}
                 onClick={() => {
                   setselectDashboard({
                     ...selectedButton,
